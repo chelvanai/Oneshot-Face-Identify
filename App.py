@@ -9,7 +9,7 @@ f = None
 url = None
 
 if not os.path.isdir('./videos'):
-    os.mkdir('./past_ppl')
+    os.mkdir('./videos')
 
 
 @app.route('/upload', methods=['GET', 'POST'])
