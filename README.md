@@ -12,7 +12,7 @@ This project is designed for one shot face identify people in video.
   - after you get valid all requirements you just run App.py
   - after you upload one video file through postman
   - check it will response true or not
-  - add this source in html page {img src="http://0.0.0.0:5000/video_feed">} and save it, open that page in browser.
+  - http://0.0.0.0:5000/video_feed open this url in browser for output
   
  ## Requirement
   - numpy==1.17.2
