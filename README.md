@@ -16,3 +16,4 @@ This project is designed for one shot face identify people in video
   - scikit-learn==0.21.3
   - numba==0.45.1
   - filterpy==1.4.5
+  - Flask==1.1.1
