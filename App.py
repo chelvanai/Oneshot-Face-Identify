@@ -1,13 +1,15 @@
 import json
-
 from flask import Flask, request, Response
-# from video_stream import VideoCamera
-from video_stream_and_sort import VideoCamera
+from video_stream import VideoCamera
+import os
 
 app = Flask(__name__)
 
 f = None
 url = None
+
+if not os.path.isdir('./videos'):
+    os.mkdir('./past_ppl')
 
 
 @app.route('/upload', methods=['GET', 'POST'])
