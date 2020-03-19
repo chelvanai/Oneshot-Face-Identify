@@ -217,7 +217,7 @@ class VideoCamera:
         return
 
     def get_frame(self):
-        print("Frame number ", self.frame)
+        # print("Frame number ", self.frame)
         self.frame += 1
 
         r, img = self.cap.read()
@@ -230,7 +230,6 @@ class VideoCamera:
 
         trks = np.zeros((len(self.trackers), 5))
         to_del = []
-        ret = []
 
         for t, trk in enumerate(trks):
             pos = self.trackers[t].predict()[0]
@@ -247,7 +246,7 @@ class VideoCamera:
             if t not in unmatched_trks:
                 d = matched[np.where(matched[:, 1] == t)[0], 0]
                 trk.update(boxes[d, :][0])
-                print(boxes[d, :][0])
+                # print(boxes[d, :][0])
                 ymin, xmin, ymax, xmax = boxes[d, :][0]
                 cv2.rectangle(img, (xmin, ymin), (xmax, ymax), (255, 255), 2)
                 cv2.putText(img, str(trk.id), (int(xmin) - 10, int(ymin) - 10), cv2.FONT_HERSHEY_SIMPLEX, 1,
@@ -259,20 +258,13 @@ class VideoCamera:
 
         # new trackers
         for i in unmatched_dets:
-            print(boxes[i, :])
+            # print(boxes[i, :])
             ymin, xmin, ymax, xmax = boxes[i, :]
             cv2.rectangle(img, (xmin, ymin), (xmax, ymax), (100, 50), 2)
             trk = KalmanBoxTracker(boxes[i, :])
             self.trackers.append(trk)
 
             self.find(img, boxes[i, :], trk)
-
-        # i = len(self.trackers)
-        # for trk in reversed(self.trackers):
-        #     d = trk.get_state()[0]
-        #     if (trk.time_since_update < 1) and (trk.hit_streak >= self.min_hits or self.frame <= self.min_hits):
-        #         ret.append(np.concatenate((d, [trk.id + 1])).reshape(1, -1))  # +1 as MOT benchmark requires positive
-        #     i -= 1
 
             if trk.time_since_update > self.max_age:
                 self.trackers.pop(i)
