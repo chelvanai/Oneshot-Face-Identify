@@ -257,9 +257,9 @@ class VideoCamera:
                 d = matched[np.where(matched[:, 1] == t)[0], 0]
                 trk.update(boxes[d, :][0])
                 ymin, xmin, ymax, xmax = boxes[d, :][0]
-                cv2.rectangle(img, (xmin, ymin), (xmax, ymax), (255, 255), 2)
+                cv2.rectangle(img, (xmin, ymin), (xmax, ymax), (0, 255, 0), 2)
                 cv2.putText(img, str(trk.id), (int(xmin) - 10, int(ymin) - 10), cv2.FONT_HERSHEY_SIMPLEX, 1,
-                            (2, 255, 255))
+                            (255, 255, 255), 2)
 
                 cropped_img = img[int(ymin):int(ymax), int(xmin):int(xmax)]
                 person_no = len(os.listdir('past_ppl' + '/' + str(trk.id))) + 1
@@ -268,7 +268,7 @@ class VideoCamera:
         # new trackers
         for i in unmatched_dets:
             ymin, xmin, ymax, xmax = boxes[i, :]
-            cv2.rectangle(img, (xmin, ymin), (xmax, ymax), (100, 50), 2)
+            cv2.rectangle(img, (xmin, ymin), (xmax, ymax), (0, 0, 255), 2)
             trk = KalmanBoxTracker(boxes[i, :])
             self.trackers.append(trk)
 
