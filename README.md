@@ -1,5 +1,5 @@
 # Oneshot-Face-Identify
-This project is designed for one shot face identify people in video
+This project is designed for one shot face identify people in video.
 
 ## Face Detection 
  - Face detection model used https://arxiv.org/pdf/1708.05234.pdf
@@ -7,7 +7,13 @@ This project is designed for one shot face identify people in video
  - Multi object tracking using SORT algorithm https://arxiv.org/pdf/1602.00763.pdf
  
  ## Run 
-  - python App.py
+  - python App.py for [web view]
+  - before run you should download the face compare weight file from the txt file in the folder
+  - after you get valid all requirements you just run App.py
+  - after you upload one video file through postman
+  - check it will response true or not
+  - after you just create a html page and use this scipt for show in web view
+  <img src="http://0.0.0.0:5000/video_feed"> <br><br>
   
  ## Requirement
   - numpy==1.17.2
