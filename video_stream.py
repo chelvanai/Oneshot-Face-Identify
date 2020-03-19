@@ -166,6 +166,14 @@ class VideoCamera:
         self.min_hits = 3
         self.trackers = []
         self.frame = 0
+        self.ipcam = False
+
+        if url is None:
+            self.cap = cv2.VideoCapture(video)
+
+        if video is None:
+            self.ipcam = True
+            self.url = url
 
         self.cap = cv2.VideoCapture(video)
         fd = FaceDetector('face_detect/weight/model.pb')
@@ -217,8 +225,10 @@ class VideoCamera:
         return
 
     def get_frame(self):
-        # print("Frame number ", self.frame)
         self.frame += 1
+
+        if self.ipcam:
+            self.cap = cv2.VideoCapture(self.url)
 
         r, img = self.cap.read()
 
@@ -246,7 +256,6 @@ class VideoCamera:
             if t not in unmatched_trks:
                 d = matched[np.where(matched[:, 1] == t)[0], 0]
                 trk.update(boxes[d, :][0])
-                # print(boxes[d, :][0])
                 ymin, xmin, ymax, xmax = boxes[d, :][0]
                 cv2.rectangle(img, (xmin, ymin), (xmax, ymax), (255, 255), 2)
                 cv2.putText(img, str(trk.id), (int(xmin) - 10, int(ymin) - 10), cv2.FONT_HERSHEY_SIMPLEX, 1,
@@ -258,7 +267,6 @@ class VideoCamera:
 
         # new trackers
         for i in unmatched_dets:
-            # print(boxes[i, :])
             ymin, xmin, ymax, xmax = boxes[i, :]
             cv2.rectangle(img, (xmin, ymin), (xmax, ymax), (100, 50), 2)
             trk = KalmanBoxTracker(boxes[i, :])

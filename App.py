@@ -28,7 +28,7 @@ def ipcam():
         global url, f
         f = None
         url = request.form['url']
-        return True
+        return json.dumps(True)
 
 
 def gen(camera):
