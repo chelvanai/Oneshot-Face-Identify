@@ -12,6 +12,9 @@ from filterpy.kalman import KalmanFilter
 from numba import jit
 from sklearn.utils.linear_assignment_ import linear_assignment
 
+import warnings
+warnings.filterwarnings("ignore", category=DeprecationWarning)
+
 
 @jit
 def iou(bb_test, bb_gt):
@@ -132,6 +135,7 @@ def associate_detections_to_trackers(detections, trackers, iou_threshold=0.3):
     for d, det in enumerate(detections):
         for t, trk in enumerate(trackers):
             iou_matrix[d, t] = iou(det, trk)
+
     matched_indices = linear_assignment(-iou_matrix)
 
     unmatched_detections = []
@@ -191,6 +195,7 @@ class VideoCamera:
         print("Deleted")
 
     def find(self, img, box, trk):
+        print("Find called ###### ", trk.id)
         ymin, xmin, ymax, xmax = int(box[0]), int(box[1]), int(box[2]), int(box[3])
         cropped_img = img[ymin:ymax, xmin:xmax]
         cv2.imwrite('./temporaryImg.jpg', cropped_img)
@@ -217,15 +222,16 @@ class VideoCamera:
             if p > 70:
                 person_no = len(files) + 1
                 cv2.imwrite(past_ppl + '/' + folder + '/' + str(person_no) + '.jpg', cropped_img)
-                print("before cahnge id ",trk.id)
+                print("before cahnge id ", trk.id)
                 trk.id = str(folder)
+                print("after cahnge id ", trk.id)
                 return
 
         l = len(folders)
         os.makedirs(past_ppl + '/' + str(l))
         cv2.imwrite(past_ppl + '/' + str(l) + '/1.jpg', cropped_img)
-        print("before cahnge id ",trk.id)
         trk.id = str(l)
+        print("New one ", trk.id)
         return
 
     def get_frame(self):
