@@ -6,10 +6,12 @@ from keras.models import model_from_json
 from keras.applications.vgg16 import preprocess_input
 from sklearn.metrics.pairwise import cosine_similarity
 import cv2
+from keras import backend as K
 
 
 class FaceMatch:
     def __init__(self, model_path):
+        K.clear_session()
         self.load_model()
         model.load_weights(model_path)
 

@@ -36,7 +36,7 @@ class FaceDetector:
         config_proto = tf.ConfigProto(log_device_placement=False)
         self.sess = tf.Session(graph=graph, config=config_proto)
 
-    def __call__(self, image, score_threshold=0.6):
+    def __call__(self, image, score_threshold=0.7):
         """Detect faces.
 
         Arguments:

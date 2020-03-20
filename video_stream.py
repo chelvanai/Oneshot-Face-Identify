@@ -167,6 +167,8 @@ class VideoCamera:
         self.trackers = []
         self.frame = 0
         self.ipcam = False
+        self.detected_face = 0
+        self.unique_face = 0
 
         if url is None:
             self.cap = cv2.VideoCapture(video)
@@ -215,12 +217,14 @@ class VideoCamera:
             if p > 70:
                 person_no = len(files) + 1
                 cv2.imwrite(past_ppl + '/' + folder + '/' + str(person_no) + '.jpg', cropped_img)
+                print("before cahnge id ",trk.id)
                 trk.id = str(folder)
                 return
 
         l = len(folders)
         os.makedirs(past_ppl + '/' + str(l))
         cv2.imwrite(past_ppl + '/' + str(l) + '/1.jpg', cropped_img)
+        print("before cahnge id ",trk.id)
         trk.id = str(l)
         return
 
@@ -267,6 +271,7 @@ class VideoCamera:
 
         # new trackers
         for i in unmatched_dets:
+            self.detected_face += 1
             ymin, xmin, ymax, xmax = boxes[i, :]
             cv2.rectangle(img, (xmin, ymin), (xmax, ymax), (0, 0, 255), 2)
             trk = KalmanBoxTracker(boxes[i, :])
@@ -276,6 +281,13 @@ class VideoCamera:
 
             if trk.time_since_update > self.max_age:
                 self.trackers.pop(i)
+
+        self.unique_face = len(os.listdir('./past_ppl'))
+
+        cv2.putText(img, "Uinque face " + str(self.unique_face), (20, 20), cv2.FONT_HERSHEY_SIMPLEX, 1,
+                    (0, 255, 255), 2)
+        cv2.putText(img, "Detect face " + str(self.detected_face), (20, 50), cv2.FONT_HERSHEY_SIMPLEX, 1,
+                    (0, 255, 255), 2)
 
         ret, jpeg = cv2.imencode('.jpg', img)
         return jpeg.tobytes()
